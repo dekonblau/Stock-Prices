@@ -1,18 +1,10 @@
 const FinancialAPI = require('./financial')
+const ObjectsToCsv = require('objects-to-csv')
 
 const BASE_URL = 'https://financialmodelingprep.com/api/v3/'
 const FROM_DATE = '2019-01-01'
 const TO_DATE = '2021-01-26'
 const API_KEY = 'bb7edc1db634f403e9e1d4261a537e79'
-
-// declare array-of-arrays for stock results
-// declare array for totals
-
-module.exports = {
-    getStocks: () => ({
-
-    })
-}
 
 const asyncApiCall = async () => {
     var stocks = ['BKD', 'COST', 'NVDA']
@@ -62,6 +54,7 @@ const asyncApiCall = async () => {
 
     console.log("Total Portfolio value: ", total)
 
+    writeArrayToCsvFile(stockData)
 
     function isHighest(price) {
         if (price > highest) 
@@ -81,7 +74,10 @@ const asyncApiCall = async () => {
         return `${BASE_URL}/quote-short/${symbol}?apikey=${API_KEY}`
     }
 
-
+    async function writeArrayToCsvFile(stockData) {
+        const csv = new ObjectsToCsv(stockData)
+        await csv.toDisk('./stockData.csv')       
+    }
 
 }
 
